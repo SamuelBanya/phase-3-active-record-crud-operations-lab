@@ -1,0 +1,90 @@
+These are the commands I used:
+#+begin_src bash
+bundle exec rake -T
+#+end_src
+
+Related output:
+#+begin_src bash
+samuelbanya@Samuels-MBP ~/hub/Development/code/phase-3/phase-3-active-record-crud-operations-lab $ bundle exec rake -T
+rake console                # Runs a Pry console
+rake db:create              # Creates the database from DATABASE_URL or config/database.yml for the current RAILS_ENV (us...
+rake db:create_migration    # Create a migration (parameters: NAME, VERSION)
+rake db:drop                # Drops the database from DATABASE_URL or config/database.yml for the current RAILS_ENV (use ...
+rake db:environment:set     # Set the environment value for the database
+rake db:fixtures:load       # Loads fixtures into the current environment's database
+rake db:migrate             # Migrate the database (options: VERSION=x, VERBOSE=false, SCOPE=blog)
+rake db:migrate:down        # Runs the "down" for a given migration VERSION
+rake db:migrate:redo        # Rolls back the database one migration and re-migrates up (options: STEP=x, VERSION=x)
+rake db:migrate:status      # Display status of migrations
+rake db:migrate:up          # Runs the "up" for a given migration VERSION
+rake db:prepare             # Runs setup if database does not exist, or runs migrations if it does
+rake db:reset               # Drops and recreates the database from db/schema.rb for the current environment and loads th...
+rake db:rollback            # Rolls the schema back to the previous version (specify steps w/ STEP=n)
+rake db:schema:cache:clear  # Clears a db/schema_cache.yml file
+rake db:schema:cache:dump   # Creates a db/schema_cache.yml file
+rake db:schema:dump         # Creates a database schema file (either db/schema.rb or db/structure.sql, depending on `conf...
+rake db:schema:load         # Loads a database schema file (either db/schema.rb or db/structure.sql, depending on `config...
+rake db:seed                # Loads the seed data from db/seeds.rb
+rake db:seed:replant        # Truncates tables of each database for current environment and loads the seeds
+rake db:setup               # Creates the database, loads the schema, and initializes with the seed data (use db:reset to...
+rake db:structure:dump      # Dumps the database structure to db/structure.sql
+rake db:structure:load      # Recreates the databases from the structure.sql file
+rake db:version             # Retrieves the current schema version number
+#+end_src
+
+I used the following 'bundle exec rake db:create_migration NAME=create_movies' command to create the migration file:
+#+begin_src bash
+samuelbanya@Samuels-MBP ~/hub/Development/code/phase-3/phase-3-active-record-crud-operations-lab $ bundle exec rake db:create_migration NAME=create_movies
+db/migrate/20220903005113_create_movies.rb
+#+end_src
+
+I then modified the 'db/migrate/20220903005113_create_movies.rb' file with the following contents in accordance with what they wanted with the assignment:
+#+begin_src ruby
+class CreateMovies < ActiveRecord::Migration[6.1]
+  def change
+    create_table :movies do |t|
+      t.string :title
+      t.integer :release_date
+      t.string :director
+      t.string :lead
+      t.boolean :in_theaters
+    end
+  end
+end
+
+#+end_src
+
+I then ran the following commands:
+#+begin_src bash
+bundle exec rake db:migrate
+bundle exec rake db:migrate RAKE_ENV=test
+#+end_src
+
+Related output:
+#+begin_src bash
+samuelbanya@Samuels-MBP ~/hub/Development/code/phase-3/phase-3-active-record-crud-operations-lab $ bundle exec rake db:migrate== 20220903005113 CreateMovies: migrating =====================================
+-- create_table(:movies)
+   -> 0.0012s
+== 20220903005113 CreateMovies: migrated (0.0012s) ============================
+
+samuelbanya@Samuels-MBP ~/hub/Development/code/phase-3/phase-3-active-record-crud-operations-lab $ bundle exec rake db:migrate RAKE_ENV=test
+#+end_src
+
+I then ran the following command to seed the database:
+#+begin_src bash
+samuelbanya@Samuels-MBP ~/hub/Development/code/phase-3/phase-3-active-record-crud-operations-lab $ bundle exec rake db:seed
+#+end_src
+
+I then checked the related Active Record methods with the related 'bundle exec rake console' method:
+#+begin_src bash
+bundle exec rake console
+#+end_src
+
+Example method that the lab provided:
+#+begin_src ruby
+class Movie < ActiveRecord::Base
+  def self.find_all_movies_by_year(year)
+    Movie.where(year: year)
+  end
+end
+#+end_src
